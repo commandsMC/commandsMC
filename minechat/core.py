@@ -33,11 +33,12 @@ class Mineflayer:
         )
         ```
         """
-        from ._commands import stop_event_bot
+        from ._commands import stop_event_bot, stop_all_events_bot
 
         self.prefix = config.pop('prefix', '!')
+        self.admin = config.pop('admin', None)
         self.instance = mineflayer.createBot(config)
-        self.version = config.get('version')
+        self.instance.admin = self.admin
         self.commands = [
             {
             'name': 'help',
@@ -50,6 +51,11 @@ class Mineflayer:
             'name': 'stop',
             'description': f'Stop a bot event. Example {self.prefix}stop <NAME FUNCTION>',
             'function': stop_event_bot
+            },
+            {
+            'name': 'stop_all',
+            'description': 'Stop all bot events.',
+            'function': stop_all_events_bot
             }
         ]
         self.echo = {
@@ -57,6 +63,10 @@ class Mineflayer:
             'function': None
         }
     
+    @property
+    def version(self) -> str:
+        return self.instance.version
+
     def load_plugin(self, plugin: str) -> None:
         """
         Loads a plugin.
