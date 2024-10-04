@@ -67,6 +67,14 @@ class Mineflayer:
     def version(self) -> str:
         return self.instance.version
 
+    def chat(self, message: str) -> None:
+        """
+        Sends a message to the chat.
+
+        - message: str - The message to send.
+        """
+        self.instance.chat(message)
+
     def load_plugin(self, plugin: str) -> None:
         """
         Loads a plugin.
@@ -130,7 +138,7 @@ class Mineflayer:
             'function': func
         })
     
-    def run(self):
+    def run(self) -> None:
         """
         Executes the bot.
         """
