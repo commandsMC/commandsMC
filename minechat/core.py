@@ -3,7 +3,7 @@ from colorama import Fore
 from datetime import datetime
 from dataclasses import dataclass
 from functools import wraps
-from javascript import require, On, once
+from javascript import require, On, once, off
 from .logger import logger
 from .functions import _is_exists_command
 
@@ -39,6 +39,7 @@ class Mineflayer:
         self.admin = config.pop('admin', None)
         self.instance = mineflayer.createBot(config)
         self.instance.admin = self.admin
+        self.funcs_events = None
         self.commands = [
             {
             'name': 'help',
@@ -85,6 +86,14 @@ class Mineflayer:
             self.instance.loadPlugin(plugin)
         except Exception as e:
             raise e
+        
+    def load_events(self, func: Callable) -> None:
+        """
+        Load the events of the bot.
+
+        - func: Callable - The function that contains the events.
+        """
+        self.funcs_events = func
 
     def message_handler(self, command: Union[Dict[str, str], None] = None, echo: bool = False) -> None:
         """
@@ -142,6 +151,9 @@ class Mineflayer:
         """
         Executes the bot.
         """
+        if self.funcs_events:
+            self.funcs_events()
+        
         once(self.instance, 'login')
         logger.info(f'Bot {Fore.YELLOW}{self.instance.username}{Fore.RESET} connected.')
     
