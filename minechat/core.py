@@ -168,7 +168,7 @@ class Mineflayer:
             cmd = message.split()[0]
             for command in self.commands:
                 if cmd not in [self.prefix + c['name'] for c in self.commands]:
-                    self.instance.chat('Command not found. Use !help to see all commands.')
+                    self.instance.chat(f'Command not found. Use {self.prefix}help to see all commands.')
                     return
 
                 if cmd == self.prefix + command['name']:                    
